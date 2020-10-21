@@ -3,11 +3,18 @@ import utilStyles from "../styles/utils.module.css";
 
 import Head from "next/head";
 import Link from "next/link";
+import React from "react";
 
 const NAME = "Malte";
 export const SITE_TITLE = "Next.js Sample Website";
 
-export default function Layout({children, home}) {
+interface ILayoutProps {
+    children: React.ReactNode;
+
+    home?: boolean;
+}
+
+export default function Layout({children, home}: ILayoutProps) {
     return (
         <div className={styles.container}>
             <Head>
