@@ -6,7 +6,7 @@ import html from "remark-html";
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "posts");
 
-function getMarkdownAndMetadata(fileName) {
+function getMarkdownAndMetadata(fileName: string) {
     // Read markdown file as string
     const fullPath = path.join(POSTS_DIRECTORY, fileName);
     const fileContents = fs.readFileSync(fullPath, "utf8");
@@ -15,6 +15,11 @@ function getMarkdownAndMetadata(fileName) {
     const matterResult = matter(fileContents);
 
     return matterResult;
+}
+
+interface IMatterResultData {
+    date: string;
+    title: string;
 }
 
 export function getSortedPostsData() {
@@ -29,7 +34,7 @@ export function getSortedPostsData() {
         // Combine the data with the id
         return {
             id,
-            ...matterResult.data,
+            ...(matterResult.data as IMatterResultData),
         };
     });
 
@@ -49,7 +54,12 @@ export function getAllPostIds() {
     });
 }
 
-export async function getPostData(id) {
+export interface IPostData extends IMatterResultData {
+    id: string;
+    contentHtml: string;
+}
+
+export async function getPostData(id: string) {
     const matterResult = getMarkdownAndMetadata(`${id}.md`);
 
     // Use remark to convert markdown into HTML string
@@ -62,6 +72,6 @@ export async function getPostData(id) {
     return {
         id,
         contentHtml,
-        ...matterResult.data,
+        ...(matterResult.data as IMatterResultData),
     };
 }

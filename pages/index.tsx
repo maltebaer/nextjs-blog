@@ -6,7 +6,15 @@ import Link from "next/link";
 import Date from "../components/date";
 import Layout, {SITE_TITLE} from "../components/layout";
 
-export default function Home({allPostsData}) {
+interface IHomeProps {
+    allPostsData: {
+        date: string;
+        title: string;
+        id: string;
+    }[];
+}
+
+export default function Home({allPostsData}: IHomeProps) {
     return (
         <Layout home>
             <Head>
@@ -14,7 +22,7 @@ export default function Home({allPostsData}) {
             </Head>
             <section className={utilStyles.headingMd}>
                 <p>
-                    Hello, I'm <bold>Malte</bold>. A father, a husband and
+                    Hello, I'm <strong>Malte</strong>. A father, a husband and
                     currently in hospital.
                 </p>
             </section>
@@ -40,9 +48,11 @@ export default function Home({allPostsData}) {
     );
 }
 
+import {GetStaticProps} from "next";
+
 import {getSortedPostsData} from "../lib/posts";
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
     const allPostsData = getSortedPostsData();
 
     return {
@@ -50,4 +60,4 @@ export async function getStaticProps() {
             allPostsData,
         },
     };
-}
+};
